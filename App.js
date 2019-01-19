@@ -1,50 +1,36 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import TodoList from './components/todo-list';
+import AddTodo from './components/add-todo';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+const todos = [
+  { text: 'fazer o app bonitão :(' },
+  { text: 'fazer o app mais bonitão' },
+  { text: 'lanchar' }
+]
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-class Hello extends Component {
+export default class App extends Component {
 
   constructor() {
     super();
 
     this.state = {
-      name: 'Jefferson'
+      todos
     }
   }
 
-  render() {
-    return (
-      <Text
-        style={styles.welcome}
-      >
-        Welcome {this.state.name}!
-      </Text>
-    )
+  addTodo(text) {
+    this.setState({
+      todos: this.state.todos.concat([{ text }])
+    })
   }
-}
 
-type Props = {};
-export default class App extends Component<Props> {
   render() {
+    let { todos } = this.state;
     return (
       <View style={styles.container}>
-        <Hello />
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <AddTodo add={text => this.addTodo(text)} />
+        <TodoList todoList={todos}/>
       </View>
     );
   }
@@ -53,8 +39,8 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
