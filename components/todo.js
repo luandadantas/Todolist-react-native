@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
         marginBottom: 7.5,
         backgroundColor: 'white',
         elevation: 10,
-
     }
 })
 export default Todo;
