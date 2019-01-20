@@ -22,16 +22,20 @@ class TodoDetails extends Component {
     title: 'Todo'
   }
   render() {
+    const todo = this.props.navigation.getParam('todo');
+    console.warn(todo);
     return (
         <View>
           <Text>
-            {this.props.navigation.getParam('text')}
+            {todo.text}
+          </Text>
+          <Text>
+            created at: {todo.location}
           </Text>
         </View>
     ) 
   }
 }
-
 
 class Home extends Component {
   static navigationOptions = {
@@ -42,34 +46,72 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      todos: []
+      todos: [],
+      idCount: 0,
     }
     this.requestMapsPermission();
   }
-
+ 
   async requestMapsPermission() {
     try {
-      const isGranted = PermissionsAndroid.request (
+      const isGranted = await PermissionsAndroid.request (
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
           'title': 'Todo app location access',
           'message': 'We need your location to know where you are'
         }
       )
+      console.warn(isGranted)
       this.setState({
         geolocationPermissionGranted: isGranted
       })    
     } catch (err){
-      return;
+      console.error(err);
+    }
+  }
+
+
+  async setTodolocation (id, coords) {
+    const {latitude, longitude} = coords;
+
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=`
+      );
+      const data = await response.json();
+
+      if (!data.error_message) {
+        const address = data.results[0].formatted_address;
+
+        const {todos} = this.state;
+        todos
+        .find(todo=> todo.id === id)
+        .location = address;
+        this.setState({
+          todos
+        })
+      } else {
+        throw JSON.stringify(data);
+      }
+    } catch(e) {
+      console.error(e);
     }
   }
 
   addTodo(text) {
     const id = this.state.idCount +1;
     this.setState({
-      todos: this.state.todos.concat([{ text }])
-    })
+      todos: this.state.todos.concat([{ text, id }]),
+      idCount: id
+    });
+  
+    if (this.state.geolocationPermissionGranted){
+      navigator.geolocation.getCurrentPosition((pos) => {
+        this.setTodolocation(id, pos.coords)
+      }, null, { enableHighAccuracy: true})
+    }
   }
+
 
   render() {
     let { todos } = this.state;

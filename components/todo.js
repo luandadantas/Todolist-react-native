@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 
 class Todo extends Component {
     render() {
+        console.warn(this.props.todo);
         let { text } = this.props;
         return (
             <TouchableNativeFeedback
@@ -10,11 +11,11 @@ class Todo extends Component {
             this
               .props
               .navigation
-              .navigate('TodoDetails')
+              .navigate('TodoDetails', {todo: this.props.todo})
             }>
             <View style={styles.container}>
                 <Text style={styles.text}>
-                    { this.props.text }
+                    { this.props.todo.text }
                 </Text>
             </View>
             </TouchableNativeFeedback>
