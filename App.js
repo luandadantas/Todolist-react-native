@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
-import { StyleSheet, ScrollView, View, Text, TouchableNativeFeedback } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, TouchableNativeFeedback, PermissionsAndroid } from 'react-native';
 import TodoList from './components/todo-list';
 import AddTodo from './components/add-todo';
 
@@ -41,14 +41,31 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
-    
-
     this.state = {
       todos: []
+    }
+    this.requestMapsPermission();
+  }
+
+  async requestMapsPermission() {
+    try {
+      const isGranted = PermissionsAndroid.request (
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          'title': 'Todo app location access',
+          'message': 'We need your location to know where you are'
+        }
+      )
+      this.setState({
+        geolocationPermissionGranted: isGranted
+      })    
+    } catch (err){
+      return;
     }
   }
 
   addTodo(text) {
+    const id = this.state.idCount +1;
     this.setState({
       todos: this.state.todos.concat([{ text }])
     })

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 7.5,
         backgroundColor: 'white',
-        elevation: 10,
+        elevation: 7,
     }
 })
 export default Todo;

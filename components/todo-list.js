@@ -7,8 +7,11 @@ class TodoList extends Component {
         let { todoList } = this.props;
         return (
             <View style= {styles.container}>
-                {todoList.map(todo => 
-                    <Todo text={ todo.text } navigation={this.props.navigation}/>
+                {todoList.map((todo, index) => 
+                    <Todo 
+                    text={ todo.text } 
+                    navigation={this.props.navigation}
+                    key={index}/>
                 )}
             </View>
         )
