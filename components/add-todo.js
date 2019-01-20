@@ -31,6 +31,7 @@ class AddTodo extends Component {
                     onChangeText={text => this.onTextInput(text)}
                 />
                 <Button
+                    disabled={!this.state.text}
                     style={styles.button} 
                     onPress={() => this.addTodo()}
                     title="add"
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         padding: 15,
-        backgroundColor: 'lightgray',
+        backgroundColor: '#9effff',
         flexDirection: 'row',
         alignItems: 'center'
     },
